@@ -28,6 +28,9 @@ base:
 {% else %}
     - monit
 {% endif %}
+{% if grains.network_mode is defined and grains.network_mode == 'flannel' %}
+    - flannel
+{% endif %}
 
   'roles:kubernetes-master':
     - match: grain
@@ -41,7 +44,7 @@ base:
 {% else %}
     - monit
 {% endif %}
-{% if grains['cloud'] is defined and not grains.cloud in [ 'aws', 'gce', 'vagrant' ] %}
+{% if grains['cloud'] is defined and not grains.cloud in [ 'aws', 'gce', 'vagrant', 'linode' ] %}
     - nginx
 {% endif %}
     - cadvisor
@@ -65,6 +68,9 @@ base:
 {% if grains['cloud'] is defined and grains['cloud'] in [ 'vagrant', 'gce', 'aws' ] %}
     - docker
     - kubelet
+{% endif %}
+{% if grains['network_mode'] is defined and grains['network_mode'] == 'flannel' %}
+    - flannel
 {% endif %}
 
   'roles:kubernetes-pool-vsphere':

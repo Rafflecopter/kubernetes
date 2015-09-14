@@ -24,13 +24,15 @@ set -o pipefail
 SALT_ROOT=$(dirname "${BASH_SOURCE}")
 readonly SALT_ROOT
 
-readonly KUBE_DOCKER_WRAPPED_BINARIES=(
-      kube-apiserver
-      kube-controller-manager
-      kube-scheduler
-)
-    
-readonly SERVER_BIN_TAR=${1-}
+KUBE_VERSION="$1"
+readonly KUBE_VERSION
+
+if [[ -z "$KUBE_VERSION" ]]; then
+  echo "!!! No version specified"
+  exit 1
+fi
+
+readonly SERVER_BIN_TAR=${2-}
 if [[ -z "$SERVER_BIN_TAR" ]]; then
   echo "!!! No binaries specified"
   exit 1
@@ -61,18 +63,13 @@ for dir in "${SALTDIRS[@]}"; do
   fi
 done
 
-echo "+++ Install binaries from tar: $1"
-tar -xz -C "${KUBE_TEMP}" -f "$1"
+echo "+++ Install binaries from tar: $SERVER_BIN_TAR"
+tar -xz -C "${KUBE_TEMP}" -f "$SERVER_BIN_TAR"
 mkdir -p /srv/salt-new/salt/kube-bins
 cp -v "${KUBE_TEMP}/kubernetes/server/bin/"* /srv/salt-new/salt/kube-bins/
 
-kube_bin_dir="/srv/salt-new/salt/kube-bins";
 docker_images_sls_file="/srv/salt-new/pillar/docker-images.sls";
-for docker_file in "${KUBE_DOCKER_WRAPPED_BINARIES[@]}"; do
-  docker_tag=$(cat ${kube_bin_dir}/${docker_file}.docker_tag);
-  sed -i "s/#${docker_file}_docker_tag_value#/${docker_tag}/" "${docker_images_sls_file}";
-done
-
+sed -i "s/#hyperkube_docker_tag_value#/${KUBE_VERSION}/" "${docker_images_sls_file}";
 
 echo "+++ Swapping in new configs"
 for dir in "${SALTDIRS[@]}"; do

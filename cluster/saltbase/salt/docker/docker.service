@@ -1,12 +1,24 @@
+{% set using_flannel = False %}
+{% if grains.network_mode is defined and
+      grains.network_mode == "flannel" and
+      grains.roles[0] != "kubernetes-master" -%}
+  {% set using_flannel = True %}
+{% endif %}
+
 [Unit]
 Description=Docker Application Container Engine
 Documentation=http://docs.docker.com
-After=network.target docker.socket
-Requires=docker.socket
+After=network.target docker.socket {% if using_flannel %}flanneld.service{% endif %}
+Requires=docker.socket {% if using_flannel %}flanneld.service{% endif %}
 
 [Service]
 EnvironmentFile={{ environment_file }}
+{% if using_flannel -%}
+EnvironmentFile=-/run/flannel/subnet.env
+ExecStart=/usr/bin/docker -d -H fd:// "$DOCKER_OPTS" --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU}
+{% else -%}
 ExecStart=/usr/bin/docker -d -H fd:// "$DOCKER_OPTS"
+{% endif -%}
 MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576

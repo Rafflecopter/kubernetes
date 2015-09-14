@@ -1,6 +1,8 @@
 {% set docker_opts = "" -%}
 {% if grains.docker_opts is defined and grains.docker_opts -%}
   {% set docker_opts = grains.docker_opts -%}
+{% elif grains.network_mode is defined and grains.network_mode == "flannel" -%}
+  {% set docker_opts = "--iptables=false --ip-masq=false" -%}
 {% endif -%}
 
 DOCKER_OPTS='{{docker_opts}}'
