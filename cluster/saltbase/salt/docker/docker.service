@@ -15,7 +15,7 @@ Requires=docker.socket {% if using_flannel %}flanneld.service{% endif %}
 EnvironmentFile={{ environment_file }}
 {% if using_flannel -%}
 EnvironmentFile=-/run/flannel/subnet.env
-ExecStart=/usr/bin/docker -d -H fd:// "$DOCKER_OPTS" --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU}
+ExecStart=/usr/bin/docker -d -H fd:// "$DOCKER_OPTS" --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} --ip-masq=${FLANNEL_IPMASQ}
 {% else -%}
 ExecStart=/usr/bin/docker -d -H fd:// "$DOCKER_OPTS"
 {% endif -%}
