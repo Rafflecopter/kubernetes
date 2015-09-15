@@ -1,10 +1,8 @@
 {% set grains_opts = grains.get('docker_opts', '') -%}
-{% set bridge = "--bridge=cbr0" -%}
-{% set docker_opts = "--iptables=false --ip-masq=false" -%}
 {% if grains.network_mode is defined and grains.network_mode == "flannel" -%}
-  {% set docker_opts = grains_opts + " " + docker_opts -%}
+  {% set docker_opts = grains_opts -%}
 {% else -%}
-  {% set docker_opts = grains_opts + " " + bridge + " " + docker_opts -%}
+  {% set docker_opts = grains_opts + " --iptables=false --ip-masq=false --bridge=cbr0" -%}
 {% endif -%}
 
 DOCKER_OPTS="{{docker_opts}}"
