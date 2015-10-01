@@ -80,3 +80,7 @@ base:
   'roles:glusterfs':
     - match: grain
     - glusterfs
+
+  'cloud:linode':
+    - match: grain
+    - hosts
