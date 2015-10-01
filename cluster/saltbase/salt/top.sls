@@ -76,3 +76,7 @@ base:
   'roles:kubernetes-pool-vsphere':
     - match: grain
     - static-routes
+
+  'roles:glusterfs':
+    - match: grain
+    - glusterfs
