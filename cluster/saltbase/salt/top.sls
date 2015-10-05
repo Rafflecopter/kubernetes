@@ -65,7 +65,7 @@ base:
 {% if grains['cloud'] is defined and grains['cloud'] == 'azure' %}
     - openvpn
 {% endif %}
-{% if grains['cloud'] is defined and grains['cloud'] in [ 'vagrant', 'gce', 'aws' ] %}
+{% if grains['cloud'] is defined and grains['cloud'] in [ 'vagrant', 'gce', 'aws', 'linode' ] %}
     - docker
     - kubelet
 {% endif %}

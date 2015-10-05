@@ -5,6 +5,11 @@
 {{host}}:
   host.present:
     - ip: {{ip}}
+    - names:
+      - {{host}}
+      {% if host.split('.')[0] != host %}
+      - {{host.split('.')[0]}}
+      {% endif %}
 
 {% endif %}
 {% endfor %}

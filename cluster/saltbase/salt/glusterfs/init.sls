@@ -1,9 +1,10 @@
 glusterfs-server:
   pkg.installed: []
-
-/data/brick1:
-  file.directory:
-    makedirs: true
+  service.running:
+    - enable: true
+    - requires:
+      - pkg: glusterfs-server
+      - mount: /data/brick1
 
 /data/brick1:
   mount.mounted:
@@ -15,9 +16,3 @@ glusterfs-server:
     - mkmnt: true
     - dump: 1
     - pass_num: 2
-
-glusterd:
-  service.started:
-    - requires:
-      - pkg: glusterfs-server
-      - mount: /data/brick1
