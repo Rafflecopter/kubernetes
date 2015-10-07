@@ -16,3 +16,7 @@ glusterfs-server:
     - mkmnt: true
     - dump: 1
     - pass_num: 2
+
+/var/run/gluster:
+  file.directory:
+    - makedirs: true
