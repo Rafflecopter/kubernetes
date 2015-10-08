@@ -1,3 +1,8 @@
+{% set bind_addr = "127.0.0.1" -%}
+{% if grains.network_mode is defined and grains.network_mode == 'flannel' -%}
+  {% set bind_addr = "0.0.0.0" -%}
+{% endif -%}
+
 {
 "apiVersion": "v1",
 "kind": "Pod",
@@ -19,7 +24,7 @@
     "command": [
               "/bin/sh",
               "-c",
-              "/usr/local/bin/etcd --addr 127.0.0.1:4001 --bind-addr 127.0.0.1:4001 --data-dir /var/etcd/data 1>>/var/log/etcd.log 2>&1"
+              "/usr/local/bin/etcd --addr 127.0.0.1:4001 --bind-addr {{bind_addr}}:4001 --data-dir /var/etcd/data 1>>/var/log/etcd.log 2>&1"
             ],
     "ports":[
       { "name": "serverport",
