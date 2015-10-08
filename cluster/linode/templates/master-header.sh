@@ -82,6 +82,7 @@ reactor:
   - 'salt/minion/*/start':
     - /srv/reactor/highstate-minions.sls
     - /srv/reactor/highstate-masters.sls
+    - /srv/reactor/highstate-glusterfs.sls
 EOF
 
   salt-key --gen-keys=minion --gen-keys-dir=/etc/salt/pki/minion
