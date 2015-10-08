@@ -74,7 +74,7 @@
 {% endif -%}
 {% endif -%}
 
-{% if grains['cloud'] is defined and grains.cloud in [ 'aws', 'gce', 'vagrant']  %}
+{% if grains['cloud'] is defined and grains.cloud in [ 'aws', 'gce', 'vagrant', 'linode' ]  %}
   {% set basic_auth_file = "--basic_auth_file=/srv/kubernetes/basic_auth.csv" -%}
 {% endif -%}
 
