@@ -7,8 +7,8 @@
 {% set initial_advertise_url = "" -%}
 {% if pillar.etcd_discovery_url is defined -%}
   {% set discovery = "-discovery " + pillar.etcd_discovery_url -%}
-  {% set listen_peer_urls = "-listen-peer-urls http://" + grains.fqdn_ip4 + ":2380" -%}
-  {% set initial_advertise_url = "-initial-advertise-peer-urls http://" + grains.fqdn_ip4 + ":2380" -%}
+  {% set listen_peer_urls = "-listen-peer-urls http://" + grains.fqdn_ip4[0] + ":2380" -%}
+  {% set initial_advertise_url = "-initial-advertise-peer-urls http://" + grains.fqdn_ip4[0] + ":2380" -%}
 {% endif %}
 
 {
