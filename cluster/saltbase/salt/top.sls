@@ -77,6 +77,9 @@ base:
     - match: grain
     - static-routes
 
+  'roles:etcd-node':
+    - etcd
+
   'roles:glusterfs':
     - match: grain
     - glusterfs
