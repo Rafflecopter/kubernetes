@@ -5,6 +5,7 @@
 {% set discovery = "" -%}
 {% set listen_peer_urls = "" -%}
 {% set initial_advertise_url = "" -%}
+{% set name = "-name " + grains.id -%}
 {% if pillar.etcd_discovery_url is defined -%}
   {% set discovery = "-discovery " + pillar.etcd_discovery_url -%}
   {% set listen_peer_urls = "-listen-peer-urls http://" + grains.fqdn_ip4[0] + ":2380" -%}
@@ -32,7 +33,7 @@
     "command": [
               "/bin/sh",
               "-c",
-              "/usr/local/bin/etcd --addr 127.0.0.1:4001 --bind-addr {{bind_addr}}:4001 --data-dir /var/etcd/data {{discovery}} {{initial_advertise_url}} {{listen_peer_urls}} 1>>/var/log/etcd.log 2>&1"
+              "/usr/local/bin/etcd {{name}} --addr 127.0.0.1:4001 --bind-addr {{bind_addr}}:4001 --data-dir /var/etcd/data {{discovery}} {{initial_advertise_url}} {{listen_peer_urls}} 1>>/var/log/etcd.log 2>&1"
             ],
     "ports":[
       { "name": "serverport",
